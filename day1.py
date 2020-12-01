@@ -1,7 +1,7 @@
 ## Part 1
 
 # Opening the input
-f = open("day1data.txt","r")
+f = open("./data/day1data.txt","r")
 lines=f.readlines()
 data = []
 for x in lines:
@@ -30,3 +30,9 @@ for x in data:
                 print('The value of x = ' + str(x) + ' and the value of y = ' + str(y) + ' and the value of z = ' + str(z))
                 print('The answer to the second part of the problem is = ' + str(x*y*z))
                 break
+
+## Improvements
+f = open("./data/day1data.txt","r")
+data = []
+for x in f:
+    data.append(int(x))
