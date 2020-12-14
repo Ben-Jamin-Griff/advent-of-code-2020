@@ -21,18 +21,29 @@ class Bag:
         self.children[child] = number
 
     def isChild(self, child, bagList):
-        isAChild = False
+        #check my bags
         if child in self.children.keys():
             isAChild = True
             return isAChild
-        else:
-            for key in self.children.keys():
-                for bag in bagList:
-                    if bag.name == key:
-                        isAChild = bag.isChild(child, bagList)
-                        if isAChild:
-                            return isAChild
-        return isAChild
+        #check my kids bags
+        for key in self.children.keys():
+            for bag in bagList:
+                if bag.name == key:
+                    isAChild = bag.isChild(child, bagList)
+                    if isAChild:
+                        return isAChild
+        return
+
+    def countChildren(self, bagList, count):
+        #count my bags
+        for val in self.children.values():
+            count = count + int(val)
+        #check my bag's bags
+        for key in self.children.keys():
+            for bag in bagList:
+                if bag.name == key:
+                    count = bag.countChildren(bagList, count)
+        return count
 
 # Creating bag list
 bagList = []
@@ -45,21 +56,30 @@ for rule in data:
         bag = bag.replace(' bags.','')
         bag = bag.rstrip()
         if 'no other' in bag:
-            valueForDict = None
+            valueForDict = 0
             thisBag.updateChild(bag, valueForDict)
         else:
             bagData = bag.split(" ", 2)
             subKey = bagData[2].replace(' bags', '')
+            subKey = subKey.replace(' bag', '')
+            subKey = subKey.replace('.', '')
             subValue = int(bagData[1])
             thisBag.updateChild(subKey, subValue)
     bagList.append(thisBag)
 
 howManyBagColours = 0
 for bagy in bagList:
-    #bagy.searchBag()
     if bagy.isChild('shiny gold', bagList):
         howManyBagColours += 1
 
-print(len(bagList))
-
 print(str(howManyBagColours) + ' bags lead to at least one shiny gold bag')
+
+## Part 2
+
+howManyBags = 0
+for bag in bagList:
+    if bag.name == 'shiny gold':
+        bag.searchBag()
+        howManyBags = bag.countChildren(bagList, howManyBags)
+
+print('Your shiny gold bag contains ' + str(howManyBags) + ' other bags')
