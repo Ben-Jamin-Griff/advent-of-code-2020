@@ -35,14 +35,12 @@ class Bag:
         return
 
     def countChildren(self, bagList, count):
-        #count my bags
-        for val in self.children.values():
-            count = count + int(val)
-        #check my bag's bags
-        for key in self.children.keys():
+        for key, val in self.children.items():
+            numOfMainBag = int(val)
             for bag in bagList:
                 if bag.name == key:
-                    count = bag.countChildren(bagList, count)
+                    subBagCounter = bag.countChildren(bagList, count)
+                    count = count + (numOfMainBag+subBagCounter)
         return count
 
 # Creating bag list
@@ -76,10 +74,10 @@ print(str(howManyBagColours) + ' bags lead to at least one shiny gold bag')
 
 ## Part 2
 
-howManyBags = 0
+howManyBags = 1
 for bag in bagList:
     if bag.name == 'shiny gold':
-        bag.searchBag()
+        #bag.searchBag()
         howManyBags = bag.countChildren(bagList, howManyBags)
 
 print('Your shiny gold bag contains ' + str(howManyBags) + ' other bags')
